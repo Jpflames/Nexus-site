@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The Nexus Media — preview-matched dark system (pure black + magenta/purple) */
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted: #a3a3a3;
+  --card: #121212;
+  --card-elevated: #161616;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #ec4899;
+  --accent-2: #a855f7;
+  --accent-cyan: #22d3ee;
+  --accent-blue: #3b82f6;
+  --glow-pink: rgba(236, 72, 153, 0.45);
+  --glow-purple: rgba(168, 85, 247, 0.35);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-montserrat);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Subtle dot grid (Why Choose Us reference) */
+.nexus-dot-grid {
+  background-color: #000000;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Soft purple vignette for inner pages */
+.nexus-page-glow {
+  background:
+    radial-gradient(900px 500px at 10% -10%, var(--glow-purple), transparent 55%),
+    radial-gradient(700px 400px at 90% 0%, var(--glow-pink), transparent 50%),
+    #000000;
+}
+
+.glass-panel {
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Pink → purple (buttons, highlights) */
+.btn-gradient {
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+  box-shadow: 0 12px 40px rgba(236, 72, 153, 0.35);
+}
+
+.btn-gradient:hover {
+  filter: brightness(1.06);
+}
+
+.text-gradient-pink {
+  background: linear-gradient(90deg, #f472b6 0%, #c084fc 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
