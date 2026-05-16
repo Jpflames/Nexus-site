@@ -16,6 +16,14 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Supabase Payment Schema
+
+Run the SQL in `supabase/schema.sql` in your Supabase SQL editor before testing checkout. It creates the `payments` table used by Paystack checkout, adds indexes, keeps `updated_at` current, and enables row level security so signed-in users can read only their own payments while server-side service role calls can create and update payment records.
+
+## Admin Course Uploads
+
+Set `ADMIN_EMAILS` in your environment to a comma-separated list of admin account emails, then visit `/admin/courses` while signed in with one of those emails. Admins can create courses, attach lessons, choose the phase, and publish content for paid learners.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

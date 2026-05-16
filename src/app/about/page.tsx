@@ -38,7 +38,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
         <FadeIn>
           <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
-            About <span className="text-gradient-pink">The Nexus Media</span>
+            About <span className="text-gradient-pink">Nexus Media</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">{company.heroDescription}</p>
         </FadeIn>

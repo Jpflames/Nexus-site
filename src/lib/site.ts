@@ -1,20 +1,20 @@
-/** Site-wide copy, navigation, and contact — aligned with brand preview */
+/** Site-wide copy, navigation, and contact for the Nexus Media platform */
 
 export const company = {
-  name: "The Nexus Media Limited",
-  shortName: "The Nexus Media",
-  tagline: "Building Connections. Amplifying Brands. Creating Impact.",
+  name: "Nexus Media",
+  shortName: "Nexus Media",
+  tagline: "Brand, media, HR, and career growth support for ambitious teams and professionals.",
   heroDescription:
-    "We're a forward-thinking media and marketing company dedicated to helping brands create meaningful connections with their audiences.",
+    "Nexus Media helps brands, teams, and professionals grow through sharp creative systems, publicity, HR support, and practical career acceleration.",
   description:
-    "A forward-thinking media and marketing company that helps brands connect meaningfully with their audience through strategic, visual, and results-driven communication.",
-  phone: "+234 (0) 123 456 7890",
-  email: "hello@nexusmedia.ng",
+    "Nexus Media is a creative and professional services company delivering branding, marketing, media support, HR services, and career acceleration programs.",
+  phone: "+234 000 000 0000",
+  email: "hello@nexusmedia.co",
   address: "Karu, Nasarawa, Nigeria",
   founder: {
     name: "Nathaniel Ishaya",
     role: "Founder & Creative Director",
-    bio: "With a passion for storytelling and brand building, Nathaniel founded The Nexus Media to help brands create meaningful connections with their audiences.",
+    bio: "Nathaniel built Nexus Media to help organizations communicate clearly, hire better, and grow with polished creative and people-focused systems.",
   },
 } as const;
 
@@ -22,7 +22,7 @@ export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
-  { href: "/approach", label: "Our Approach" },
+  { href: "/courses", label: "Courses" },
   { href: "/contact", label: "Contact" },
 ] as const;
 
@@ -30,14 +30,15 @@ export const footerServices = [
   "Branding & Identity",
   "Marketing & Publicity",
   "Media & Content Support",
-  "Digital Strategy",
+  "HR Services",
 ] as const;
 
 export const serviceInterestOptions = [
   "Branding & Identity",
   "Marketing & Publicity",
   "Media & Content Support",
-  "Digital Strategy",
+  "HR Services",
+  "Career Acceleration",
   "Other",
 ] as const;
 
@@ -48,4 +49,4 @@ export const socialLinks = [
   { label: "X", href: "https://x.com", icon: "x" as const },
 ] as const;
 
-export const trustIndustries = ["Tech", "Finance", "Healthcare", "Retail", "Education"] as const;
+export const trustIndustries = ["Fintech", "Enterprise", "Consulting", "E-commerce", "Education"] as const;

@@ -25,24 +25,33 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thenexusmedia.example"),
+  metadataBase: new URL("https://nexusmedia.co"),
   title: {
-    default: `${company.shortName} | Media & Marketing Agency`,
+    default: `${company.shortName} | Creative, Media & HR Services`,
     template: `%s | ${company.shortName}`,
   },
   description: company.description,
   keywords: [
-    "The Nexus Media",
-    "media agency",
-    "marketing agency",
-    "branding Nigeria",
-    "Nasarawa",
-    "digital marketing",
+    "Nexus Media",
+    "branding agency",
+    "media support",
+    "HR services",
+    "marketing publicity",
+    "career accelerator",
+    "professional development",
   ],
   openGraph: {
     title: company.shortName,
     description: company.tagline,
     type: "website",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80",
+        width: 1600,
+        height: 900,
+        alt: "Nexus Media creative, media, and HR services",
+      },
+    ],
   },
 };
 

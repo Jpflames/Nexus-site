@@ -12,7 +12,7 @@ const features = [
   },
   {
     title: "Creative Excellence",
-    body: "Premium craft across identity, campaigns, and content—built to stand out in crowded markets.",
+    body: "Premium craft across identity, campaigns, and content, built to stand out in crowded markets.",
     icon: Zap,
   },
   {
@@ -22,7 +22,7 @@ const features = [
   },
   {
     title: "Proven Results",
-    body: "Work engineered for recall, trust, and conversion—measured against outcomes that matter.",
+    body: "Work engineered for recall, trust, and conversion, measured against outcomes that matter.",
     icon: Award,
   },
 ] as const;
@@ -33,7 +33,7 @@ const stats = [
   { value: "50+", label: "Brands Transformed" },
 ] as const;
 
-/** Why Choose Us — four icon cards + stat bar (preview layout) */
+/** Why choose us section for services */
 export function WhyUs() {
   return (
     <section className="nexus-dot-grid border-t border-white/10 py-24">

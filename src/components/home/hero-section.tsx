@@ -16,7 +16,7 @@ const stats = [
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=2400&q=80";
 
-/** Full-viewport hero — desk imagery, gradient headline, dual CTAs, stat strip */
+/** Full-viewport hero for Nexus Media services */
 export function HeroSection() {
   return (
     <section className="relative min-h-[92vh] overflow-hidden">
@@ -41,7 +41,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-4 py-1.5 text-xs font-medium text-zinc-300 backdrop-blur-md"
           >
             <Sparkles className="h-3.5 w-3.5 text-[#f472b6]" />
-            Premium Media &amp; Marketing Agency
+            Creative, Media &amp; HR Services
           </motion.div>
 
           <motion.h1
@@ -50,9 +50,9 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[3.5rem]"
           >
-            <span className="block">Building Connections.</span>
-            <span className="block text-gradient-pink">Amplifying Brands.</span>
-            <span className="block text-gradient-cyan">Creating Impact.</span>
+            <span className="block">Creative services for</span>
+            <span className="block text-gradient-pink">brands, teams,</span>
+            <span className="block text-gradient-cyan">and people.</span>
           </motion.h1>
 
           <motion.p

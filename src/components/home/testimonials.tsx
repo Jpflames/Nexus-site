@@ -13,7 +13,7 @@ const items = [
   },
   {
     quote:
-      "Working with The Nexus Media was a game-changer. They understood our vision and brought it to life beautifully.",
+      "Working with Nexus Media was a game-changer. They understood our vision and brought it to life beautifully.",
     name: "Michael Chen",
     role: "Marketing Director, GrowthCo",
     avatar: "https://i.pravatar.cc/120?img=11",
@@ -37,7 +37,7 @@ export function Testimonials() {
             What Our Clients Say
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-400 sm:text-lg">
-            Don&apos;t just take our word for it — hear from brands we&apos;ve helped transform.
+            Don&apos;t just take our word for it. Hear from brands we&apos;ve helped transform.
           </p>
         </FadeIn>
 

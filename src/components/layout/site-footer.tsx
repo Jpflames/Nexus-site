@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { FacebookIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/social-icons";
@@ -19,8 +20,8 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div className="space-y-5">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#ec4899] to-[#a855f7] text-sm font-bold text-white">
-              N
+            <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden">
+              <Image src="/nexus%20icon.png" alt="Nexus Media icon" fill className="object-contain" sizes="40px" />
             </span>
             <span className="font-display text-base font-bold text-white">{company.shortName}</span>
           </div>

@@ -1,16 +1,35 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, UserPlus, X } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
+import { createBrowserClient } from "@/lib/supabase-client";
 import { company, navLinks } from "@/lib/site";
 
-/** Sticky header — logo, centered nav with pink active underline, Get Started CTA */
+/** Sticky header — premium Nexus Media navigation with floating mobile menu and conversion CTA */
 export function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [supabase] = useState(() =>
+    createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""),
+  );
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => {
+      data.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -19,12 +38,17 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl">
       <div className="relative mx-auto flex h-[72px] max-w-6xl items-center px-4 sm:px-6 lg:px-8">
         <Link href="/" className="relative z-10 flex shrink-0 items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#ec4899] to-[#a855f7] text-sm font-bold text-white shadow-[0_0_28px_rgba(236,72,153,0.45)]">
-            N
+          <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden">
+            <Image src="/nexus%20icon.png" alt="Nexus Media icon" fill className="object-contain" sizes="40px" priority />
           </span>
           <span className="font-display text-sm font-bold tracking-tight text-white sm:text-base">{company.shortName}</span>
         </Link>
@@ -57,13 +81,39 @@ export function SiteHeader() {
         </nav>
 
         <div className="relative z-10 ml-auto flex items-center gap-3">
-          <Link
-            href="/contact"
-            className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white btn-gradient md:inline-flex md:items-center md:gap-1.5"
-          >
-            Get Started
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          {session?.user ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white btn-gradient md:inline-flex md:items-center md:gap-1.5"
+              >
+                Dashboard
+              </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="hidden rounded-full bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 md:inline-flex"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden rounded-full bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 md:inline-flex"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white btn-gradient md:inline-flex md:items-center md:gap-1.5"
+              >
+                <UserPlus className="h-4 w-4" />
+                Sign up
+              </Link>
+            </>
+          )}
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white md:hidden"
@@ -105,12 +155,50 @@ export function SiteHeader() {
                   </Link>
                 </motion.div>
               ))}
+              {session?.user ? (
+                <div className="mt-3 space-y-2">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-full bg-white/5 px-4 py-3 text-sm font-semibold text-white text-center hover:bg-white/10"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleSignOut();
+                      setOpen(false);
+                    }}
+                    className="w-full rounded-full bg-white/5 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-3 space-y-2">
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-full bg-white/5 px-4 py-3 text-sm font-semibold text-white text-center hover:bg-white/10"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-full py-3 text-sm font-semibold text-white text-center btn-gradient"
+                  >
+                    Sign up
+                  </Link>
+                </div>
+              )}
               <Link
-                href="/contact"
+                href="/checkout"
                 onClick={() => setOpen(false)}
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold text-white btn-gradient"
               >
-                Get Started
+                Enroll Now
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </nav>

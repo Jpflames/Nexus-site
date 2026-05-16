@@ -42,7 +42,7 @@ export function ServicesPreview() {
             href="/services"
             className="text-sm font-semibold text-accent transition hover:text-accent-2"
           >
-            Explore all services →
+            Explore all services
           </Link>
         </FadeIn>
 

@@ -2,20 +2,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* The Nexus Media — preview-matched dark system (pure black + magenta/purple) */
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --muted: #a3a3a3;
-  --card: #121212;
-  --card-elevated: #161616;
+  --background: #020617;
+  --foreground: #f8fafc;
+  --muted: #94a3b8;
+  --card: rgba(10, 18, 35, 0.86);
+  --card-elevated: rgba(8, 14, 28, 0.96);
   --border: rgba(255, 255, 255, 0.08);
-  --accent: #ec4899;
-  --accent-2: #a855f7;
-  --accent-cyan: #22d3ee;
-  --accent-blue: #3b82f6;
-  --glow-pink: rgba(236, 72, 153, 0.45);
-  --glow-purple: rgba(168, 85, 247, 0.35);
+  --accent: #2dd4bf;
+  --accent-blue: #22d3ee;
+  --accent-electric: #60a5fa;
+  --accent-emerald: #10b981;
+  --glow-blue: rgba(34, 211, 238, 0.18);
+  --glow-emerald: rgba(16, 185, 129, 0.16);
 }
 
 @theme inline {
@@ -25,7 +24,7 @@
   --color-card: var(--card);
   --color-border: var(--border);
   --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
+  --color-accent-2: var(--accent-blue);
   --font-sans: var(--font-inter);
   --font-display: var(--font-montserrat);
 }
@@ -35,60 +34,88 @@ html {
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background: radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(16, 185, 129, 0.1), transparent 30%),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-/* Subtle dot grid (Why Choose Us reference) */
-.nexus-dot-grid {
-  background-color: #000000;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
+::selection {
+  background: rgba(34, 211, 238, 0.22);
+  color: white;
 }
 
-/* Soft purple vignette for inner pages */
 .nexus-page-glow {
-  background:
-    radial-gradient(900px 500px at 10% -10%, var(--glow-purple), transparent 55%),
-    radial-gradient(700px 400px at 90% 0%, var(--glow-pink), transparent 50%),
-    #000000;
+  background: radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.14), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.12), transparent 35%),
+    var(--background);
 }
 
 .glass-panel {
-  background: rgba(18, 18, 18, 0.85);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(6, 12, 24, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 
-/* Pink → purple (buttons, highlights) */
-.btn-gradient {
-  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
-  box-shadow: 0 12px 40px rgba(236, 72, 153, 0.35);
+.glass-card {
+  background: rgba(3, 9, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
 }
 
-.btn-gradient:hover {
-  filter: brightness(1.06);
+.hero-glow {
+  background-image: radial-gradient(circle at 30% 20%, rgba(34, 211, 238, 0.18), transparent 38%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12), transparent 30%);
 }
 
-.text-gradient-pink {
-  background: linear-gradient(90deg, #f472b6 0%, #c084fc 50%, #a855f7 100%);
+.btn-primary {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  color: white;
+  box-shadow: 0 18px 50px rgba(34, 211, 238, 0.22);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(56, 189, 248, 0.35), transparent);
+}
+
+.text-gradient-electric {
+  background: linear-gradient(90deg, #22d3ee 0%, #10b981 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.text-gradient-cyan {
-  background: linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%);
+.text-gradient-emerald {
+  background: linear-gradient(90deg, #10b981 0%, #22d3ee 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.text-gradient-brand {
-  background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.glow-ring {
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.18);
+}
+
+.glow-border {
+  border-image: linear-gradient(135deg, rgba(34, 211, 238, 0.75), rgba(16, 185, 129, 0.75)) 1;
+}
+
+.gradient-divider {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0), rgba(16, 185, 129, 0.35), rgba(34, 211, 238, 0));
 }

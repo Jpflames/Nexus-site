@@ -7,7 +7,7 @@ import { company } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Services",
-  description: `${company.shortName} — branding, marketing, and media support.`,
+  description: `${company.shortName} offers branding, marketing, media support, and HR services.`,
 };
 
 export default function ServicesPage() {
@@ -19,7 +19,7 @@ export default function ServicesPage() {
             Our Services
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
-            Comprehensive solutions designed to elevate your brand and deliver meaningful results.
+            Comprehensive creative, media, and HR solutions designed to elevate your brand and strengthen the people systems behind it.
           </p>
         </FadeIn>
       </section>

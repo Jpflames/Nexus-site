@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Clapperboard, Megaphone, Palette } from "lucide-react";
+import { ArrowRight, Check, Clapperboard, Megaphone, Palette, UsersRound } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 
 type Block = {
@@ -11,7 +11,7 @@ type Block = {
   description: string;
   items: readonly string[];
   image: string;
-  icon: "palette" | "megaphone" | "clapper";
+  icon: "palette" | "megaphone" | "clapper" | "users";
 };
 
 const blocks: Block[] = [
@@ -42,12 +42,22 @@ const blocks: Block[] = [
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
     icon: "clapper",
   },
+  {
+    title: "HR Services",
+    description:
+      "People-focused support for hiring, onboarding, employer branding, and professional communication.",
+    items: ["Recruitment Support", "Employer Branding", "Onboarding Materials", "HR Communications"],
+    image:
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
+    icon: "users",
+  },
 ];
 
 function ServiceIcon({ type }: { type: Block["icon"] }) {
   const cls = "h-5 w-5 text-white";
   if (type === "palette") return <Palette className={cls} />;
   if (type === "megaphone") return <Megaphone className={cls} />;
+  if (type === "users") return <UsersRound className={cls} />;
   return <Clapperboard className={cls} />;
 }
 

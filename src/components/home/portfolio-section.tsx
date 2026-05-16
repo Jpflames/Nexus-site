@@ -8,17 +8,17 @@ import { FadeIn } from "@/components/motion/fade-in";
 const projects = [
   {
     title: "Lumen Health",
-    category: "Brand System · Launch",
+    category: "Brand System / Launch",
     tone: "from-emerald-500/25 to-cyan-500/10",
   },
   {
     title: "Northline Bank",
-    category: "Campaign · Social",
+    category: "Campaign / Social",
     tone: "from-blue-500/25 to-indigo-500/10",
   },
   {
     title: "Karo NGO",
-    category: "Story · Fundraising Kit",
+    category: "Story / Fundraising Kit",
     tone: "from-violet-500/25 to-fuchsia-500/10",
   },
 ] as const;
@@ -30,10 +30,10 @@ export function PortfolioSection() {
         <div>
           <p className="font-display text-xs font-semibold uppercase tracking-[0.25em] text-accent">Selected work</p>
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">Recent impact</h2>
-          <p className="mt-3 max-w-xl text-muted">A snapshot of engagements—names anonymized where needed.</p>
+          <p className="mt-3 max-w-xl text-muted">A snapshot of engagements, with names anonymized where needed.</p>
         </div>
         <Link href="/contact" className="text-sm font-semibold text-accent transition hover:text-accent-2">
-          Start a project →
+          Start a project
         </Link>
       </FadeIn>
 
