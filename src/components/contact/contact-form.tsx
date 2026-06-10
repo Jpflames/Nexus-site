@@ -14,7 +14,7 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "mt-2 w-full rounded-xl border border-white/10 bg-[#0a0a0a] px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-[#ec4899]/50 focus:ring-2 focus:ring-[#ec4899]/20";
+    "mt-2 w-full rounded-xl border border-white/10 bg-[#0a0a0a] px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20";
 
   return (
     <motion.div

@@ -28,15 +28,15 @@ export function SiteFooter() {
           <p className="text-sm leading-relaxed text-zinc-400">{company.tagline}</p>
           <ul className="space-y-3 text-sm text-zinc-400">
             <li className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ec4899]" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
               {company.address}
             </li>
             <li className="flex items-start gap-2">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#ec4899]" />
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
               {company.phone}
             </li>
             <li className="flex items-start gap-2">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#ec4899]" />
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
               <a href={`mailto:${company.email}`} className="hover:text-white">
                 {company.email}
               </a>
@@ -49,7 +49,7 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2.5 text-sm text-zinc-400">
             {navLinks.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="transition hover:text-[#f472b6]">
+                <Link href={l.href} className="transition hover:text-emerald-200">
                   {l.label}
                 </Link>
               </li>
@@ -62,7 +62,7 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2.5 text-sm text-zinc-400">
             {footerServices.map((s) => (
               <li key={s}>
-                <Link href="/services" className="transition hover:text-[#f472b6]">
+                <Link href="/services" className="transition hover:text-emerald-200">
                   {s}
                 </Link>
               </li>
@@ -80,7 +80,7 @@ export function SiteFooter() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-zinc-900 text-zinc-300 transition hover:border-[#ec4899]/40 hover:text-white"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-zinc-900 text-zinc-300 transition hover:border-emerald-400/40 hover:text-white"
                   aria-label={s.label}
                 >
                   {s.icon === "linkedin" && <LinkedInIcon className="h-4 w-4" />}

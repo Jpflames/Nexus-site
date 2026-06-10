@@ -79,7 +79,7 @@ export function ServicesAlternating() {
               >
                 <Image src={b.image} alt="" fill className="object-cover" sizes="(max-width:1024px) 100vw, 50vw" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <div className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#ec4899] to-[#a855f7] shadow-lg ring-4 ring-black/50">
+                <div className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-cyan-400 to-lime-400 shadow-lg ring-4 ring-black/50">
                   <ServiceIcon type={b.icon} />
                 </div>
               </motion.div>
@@ -90,7 +90,7 @@ export function ServicesAlternating() {
                 <ul className="mt-8 space-y-3">
                   {b.items.map((item) => (
                     <li key={item} className="flex items-center gap-3 text-sm text-zinc-300 sm:text-base">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ec4899]/20 text-[#f472b6]">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-200">
                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       </span>
                       {item}

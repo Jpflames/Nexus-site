@@ -26,6 +26,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nexusmedia.co"),
+  icons: {
+    icon: "/Nexus_logo.png",
+    shortcut: "/Nexus_logo.png",
+    apple: "/Nexus_logo.png",
+  },
   title: {
     default: `${company.shortName} | Creative, Media & HR Services`,
     template: `%s | ${company.shortName}`,

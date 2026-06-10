@@ -58,7 +58,7 @@ export const phases: Phase[] = [
     label: "Phase 1",
     description: "Build the mindset, portfolio, and career identity that makes employers notice you.",
     duration: "3 weeks",
-    price: 799,
+    price: 11000,
     outcomes: [
       "Personal brand positioning",
       "CV & LinkedIn excellence",
@@ -74,7 +74,7 @@ export const phases: Phase[] = [
     label: "Phase 2",
     description: "Execute employer-style projects with real feedback and career-ready outcomes.",
     duration: "3 weeks",
-    price: 799,
+    price: 12000,
     outcomes: [
       "Live project delivery",
       "Stakeholder communication",
@@ -90,7 +90,7 @@ export const phases: Phase[] = [
     label: "Phase 3",
     description: "Sharpen interview performance, application systems, and job search rhythm.",
     duration: "3 weeks",
-    price: 799,
+    price: 12000,
     outcomes: [
       "Interview mastery",
       "Application personalization",
@@ -106,7 +106,7 @@ export const phases: Phase[] = [
     label: "Phase 4",
     description: "A high-impact premium skill stack focused on elite roles and rapid salary growth.",
     duration: "3 weeks",
-    price: 1299,
+    price: 65000,
     premium: true,
     outcomes: [
       "Advanced career specialization",
@@ -121,7 +121,7 @@ export const phases: Phase[] = [
 export const pricingPlans = [
   {
     title: "Phase 1 – 3",
-    price: 799,
+    price: 35000,
     description: "Core employability phases with proven career acceleration outcomes.",
     bullets: ["12-week structured curriculum", "Industry-minded deliverables", "Mentor review cycles"],
     badge: "Most Popular",
@@ -129,7 +129,7 @@ export const pricingPlans = [
   },
   {
     title: "Phase 4 Premium",
-    price: 1299,
+    price: 65000,
     description: "Elite specialization with priority hiring and premium mentorship.",
     bullets: ["Advanced role-track training", "Premium career support", "Priority application support"],
     badge: "Premium",
@@ -137,7 +137,7 @@ export const pricingPlans = [
   },
   {
     title: "Full Accelerator",
-    price: 2599,
+    price: 90000,
     description: "Complete Nexus Media journey with an optimized discount and fullest career impact.",
     bullets: ["All 4 phases", "Career placement preparation", "Access to employer network"],
     badge: "Best Value",

@@ -21,6 +21,10 @@ export function SiteHeader() {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
+    if (!supabase) {
+      return;
+    }
+
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -39,6 +43,10 @@ export function SiteHeader() {
   }, [open]);
 
   const handleSignOut = async () => {
+    if (!supabase) {
+      return;
+    }
+
     await supabase.auth.signOut();
     router.push("/");
   };
@@ -71,7 +79,7 @@ export function SiteHeader() {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-[#ec4899] to-[#a855f7]"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-400"
                     transition={{ type: "spring", stiffness: 400, damping: 35 }}
                   />
                 )}
@@ -148,7 +156,7 @@ export function SiteHeader() {
                     href={link.href}
                     onClick={() => setOpen(false)}
                     className={`block rounded-xl px-3 py-3 text-base font-medium ${
-                      pathname === link.href ? "text-pink-400" : "text-zinc-400"
+                      pathname === link.href ? "text-emerald-200" : "text-zinc-400"
                     }`}
                   >
                     {link.label}

@@ -22,13 +22,20 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    const client = supabase;
+
+    if (!client) {
+      setMessage("Authentication is unavailable because Supabase credentials are not configured.");
+      return;
+    }
+
     async function checkSession() {
-      const { data } = await supabase.auth.getSession();
+      const { data } = await client.auth.getSession();
       setSession(data.session);
     }
     checkSession();
 
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data } = client.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -47,6 +54,12 @@ export function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault();
     setLoading(true);
     setMessage(null);
+
+    if (!supabase) {
+      setMessage("Authentication is unavailable because Supabase credentials are not configured.");
+      setLoading(false);
+      return;
+    }
 
     try {
       if (mode === "sign-in") {

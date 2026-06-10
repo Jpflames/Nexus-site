@@ -44,8 +44,8 @@ export function Testimonials() {
         <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {items.map((t, i) => (
             <FadeIn key={t.name} delay={0.06 * i}>
-              <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 transition hover:border-[#ec4899]/25">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#ec4899] to-[#a855f7] text-white shadow-[0_8px_24px_rgba(236,72,153,0.35)]">
+              <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 transition hover:border-emerald-400/30">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-cyan-400 to-lime-400 text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)]">
                   <Quote className="h-4 w-4" />
                 </div>
                 <div className="mt-4 flex gap-0.5">

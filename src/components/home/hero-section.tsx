@@ -7,9 +7,9 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { company } from "@/lib/site";
 
 const stats = [
-  { value: "100+", label: "Projects Delivered" },
-  { value: "50+", label: "Happy Clients" },
-  { value: "3+", label: "Years Experience" },
+  { value: "50", label: "Projects Delivered" },
+  { value: "10", label: "Happy Clients" },
+  { value: "2", label: "Years Experience" },
   { value: "24/7", label: "Support Available" },
 ] as const;
 
@@ -29,7 +29,7 @@ export function HeroSection() {
         sizes="100vw"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(236,72,153,0.12),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.14),transparent_55%)]" />
 
       <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-4xl flex-col px-4 pb-14 pt-24 text-center sm:px-6 sm:pb-16 lg:px-8 lg:pb-20">
         {/* Main hero copy stays vertically centered; stats sit in flow below with a clear gap */}
@@ -40,7 +40,7 @@ export function HeroSection() {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-4 py-1.5 text-xs font-medium text-zinc-300 backdrop-blur-md"
           >
-            <Sparkles className="h-3.5 w-3.5 text-[#f472b6]" />
+            <Sparkles className="h-3.5 w-3.5 text-emerald-300" />
             Creative, Media &amp; HR Services
           </motion.div>
 
@@ -51,8 +51,12 @@ export function HeroSection() {
             className="mt-8 font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[3.5rem]"
           >
             <span className="block">Creative services for</span>
-            <span className="block text-gradient-pink">brands, teams,</span>
-            <span className="block text-gradient-cyan">and people.</span>
+            <span className="block bg-gradient-to-r from-emerald-300 via-cyan-300 to-lime-300 bg-clip-text text-transparent">
+              brands, teams,
+            </span>
+            <span className="block bg-gradient-to-r from-emerald-200 via-cyan-200 to-lime-200 bg-clip-text text-transparent">
+              and people.
+            </span>
           </motion.h1>
 
           <motion.p
@@ -72,10 +76,16 @@ export function HeroSection() {
           >
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold text-white btn-gradient"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-400 px-8 py-3.5 text-sm font-semibold text-black shadow-[0_18px_45px_rgba(16,185,129,0.22)] transition hover:brightness-110"
             >
               Get Started
               <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/courses"
+              className="inline-flex items-center justify-center rounded-full border border-emerald-400/30 bg-emerald-400/10 px-8 py-3.5 text-sm font-semibold text-white transition hover:border-emerald-300/60 hover:bg-emerald-400/15"
+            >
+              Explore Courses
             </Link>
             <Link
               href="/services"
@@ -98,7 +108,7 @@ export function HeroSection() {
                 key={s.label}
                 className="rounded-xl border border-white/10 bg-black/50 px-4 py-4 text-center backdrop-blur-md"
               >
-                <p className="font-display text-2xl font-extrabold text-gradient-pink sm:text-3xl">{s.value}</p>
+                <p className="font-display text-2xl font-extrabold bg-gradient-to-r from-emerald-300 via-cyan-300 to-lime-300 bg-clip-text text-transparent sm:text-3xl">{s.value}</p>
                 <p className="mt-1 text-xs text-zinc-400 sm:text-sm">{s.label}</p>
               </div>
             ))}

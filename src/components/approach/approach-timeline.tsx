@@ -23,7 +23,7 @@ export type ApproachStepDef = {
 export function ApproachTimeline({ steps }: { steps: readonly ApproachStepDef[] }) {
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-[#ec4899] via-[#a855f7] to-[#ec4899]/25 md:block" />
+      <div className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-emerald-400 via-cyan-400 to-emerald-400/20 md:block" />
 
       <ol>
         {steps.map((step, i) => {
@@ -60,7 +60,7 @@ export function ApproachTimeline({ steps }: { steps: readonly ApproachStepDef[] 
               </div>
 
               <div
-                className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#ec4899] to-[#a855f7] ring-4 ring-black md:block"
+                className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-emerald-400 via-cyan-400 to-lime-400 ring-4 ring-black md:block"
                 aria-hidden
               />
             </li>
@@ -83,11 +83,11 @@ function StepCardBody({
   return (
     <>
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ec4899]/25 to-[#a855f7]/25 text-[#f472b6] ring-1 ring-[#ec4899]/25">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400/10 via-cyan-400/10 to-lime-400/10 text-emerald-200 ring-1 ring-emerald-400/25">
           <Icon className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#f472b6]">
+          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-200">
             Step {String(index + 1).padStart(2, "0")}
           </p>
           <h2 className="font-display text-xl font-bold text-white">{step.title}</h2>

@@ -38,7 +38,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
         <FadeIn>
           <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
-            About <span className="text-gradient-pink">Nexus Media</span>
+            About <span className="bg-gradient-to-r from-emerald-300 via-cyan-300 to-lime-300 bg-clip-text text-transparent">Nexus Media</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">{company.heroDescription}</p>
         </FadeIn>
@@ -74,8 +74,8 @@ export default function AboutPage() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => (
               <FadeIn key={v.title} delay={0.05 * i}>
-                <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 text-center transition hover:border-[#ec4899]/30">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-[#ec4899]/40 text-[#f472b6]">
+                <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 text-center transition hover:border-emerald-400/30">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl border border-emerald-400/40 text-emerald-200">
                     <v.icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 font-display text-lg font-bold text-white">{v.title}</h3>
@@ -89,11 +89,11 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
         <FadeIn>
-          <div className="overflow-hidden rounded-3xl border border-[#ec4899]/20 bg-[#0c0c0c] shadow-[0_0_60px_rgba(236,72,153,0.12)]">
+          <div className="overflow-hidden rounded-3xl border border-emerald-400/20 bg-[#0c0c0c] shadow-[0_0_60px_rgba(16,185,129,0.12)]">
             <div className="grid lg:grid-cols-[minmax(0,340px)_1fr]">
               <div className="relative aspect-square min-h-[280px] bg-zinc-800 lg:aspect-auto">
                 <Image
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80"
+                  src="/Nathaniel.png"
                   alt={company.founder.name}
                   fill
                   className="object-cover object-top"
@@ -102,7 +102,7 @@ export default function AboutPage() {
               </div>
               <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
                 <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">{company.founder.name}</h2>
-                <p className="mt-2 text-sm font-semibold text-gradient-pink">{company.founder.role}</p>
+                <p className="mt-2 text-sm font-semibold bg-gradient-to-r from-emerald-300 via-cyan-300 to-lime-300 bg-clip-text text-transparent">{company.founder.role}</p>
                 <p className="mt-6 leading-relaxed text-zinc-400">{company.founder.bio}</p>
               </div>
             </div>

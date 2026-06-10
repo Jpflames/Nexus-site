@@ -28,9 +28,9 @@ const features = [
 ] as const;
 
 const stats = [
-  { value: "100%", label: "Client Satisfaction" },
+  { value: "95%", label: "Client Satisfaction" },
   { value: "3x", label: "Average ROI Increase" },
-  { value: "50+", label: "Brands Transformed" },
+  { value: "10", label: "Brands Transformed" },
 ] as const;
 
 /** Why choose us section for services */
@@ -56,8 +56,8 @@ export function WhyUs() {
               viewport={{ once: true }}
               transition={{ delay: 0.06 * i, duration: 0.45 }}
             >
-              <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 transition hover:border-[#ec4899]/35 hover:shadow-[0_0_40px_rgba(236,72,153,0.12)]">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#ec4899]/50 bg-[#ec4899]/10 text-[#f472b6]">
+              <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-[#121212] p-6 transition hover:border-emerald-400/35 hover:shadow-[0_0_40px_rgba(16,185,129,0.12)]">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-emerald-400/50 bg-emerald-400/10 text-emerald-200">
                   <f.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 font-display text-lg font-bold text-white">{f.title}</h3>
@@ -68,14 +68,14 @@ export function WhyUs() {
         </div>
 
         <FadeIn className="mt-16">
-          <div className="rounded-2xl border border-[#ec4899]/20 bg-gradient-to-r from-[#ec4899]/10 via-black to-[#a855f7]/10 px-6 py-10 sm:px-10">
+          <div className="rounded-2xl border border-emerald-400/20 bg-gradient-to-r from-emerald-400/10 via-black to-cyan-400/10 px-6 py-10 sm:px-10">
             <div className="flex flex-col gap-8 sm:flex-row sm:items-stretch sm:justify-around sm:gap-0">
               {stats.map((s, i) => (
                 <div
                   key={s.label}
                   className={`text-center sm:flex-1 ${i > 0 ? "sm:border-l sm:border-white/10 sm:pl-10" : ""}`}
                 >
-                  <p className="font-display text-4xl font-extrabold text-gradient-pink sm:text-5xl">{s.value}</p>
+                  <p className="font-display text-4xl font-extrabold bg-gradient-to-r from-emerald-300 via-cyan-300 to-lime-300 bg-clip-text text-transparent sm:text-5xl">{s.value}</p>
                   <p className="mt-2 text-sm text-zinc-300">{s.label}</p>
                 </div>
               ))}

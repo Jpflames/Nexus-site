@@ -14,7 +14,7 @@ export type PaymentPlan = {
 export const paymentPlans: PaymentPlan[] = [
   {
     title: "Phase 1",
-    price: 799,
+    price: 11000,
     description: "Employability foundation access for focused career positioning.",
     bullets: ["Employability Foundation", "Career identity toolkit", "Mentor review cycle"],
     badge: "Starter",
@@ -24,7 +24,7 @@ export const paymentPlans: PaymentPlan[] = [
   },
   {
     title: "Phase 2",
-    price: 799,
+    price: 12000,
     description: "Real-world project experience with employer-style feedback.",
     bullets: ["Real-World Experience", "Live project delivery", "Case study build"],
     badge: "Project",
@@ -34,7 +34,7 @@ export const paymentPlans: PaymentPlan[] = [
   },
   {
     title: "Phase 3",
-    price: 799,
+    price: 12000,
     description: "Job readiness training for interviews, applications, and offers.",
     bullets: ["Job Readiness", "Interview mastery", "Application system"],
     badge: "Career",
@@ -44,7 +44,7 @@ export const paymentPlans: PaymentPlan[] = [
   },
   {
     title: "Phase 4",
-    price: 1299,
+    price: 65000,
     description: "Premium skill track access for advanced role specialization.",
     bullets: ["Premium Skill Track", "Advanced portfolio asset", "Priority placement support"],
     badge: "Premium",
@@ -54,7 +54,7 @@ export const paymentPlans: PaymentPlan[] = [
   },
   {
     title: "Full Accelerator",
-    price: 2599,
+    price: 90000,
     description: "Complete Nexus Media journey with an optimized discount and fullest career impact.",
     bullets: ["All 4 phases", "Career placement preparation", "Access to employer network"],
     badge: "Best Value",
