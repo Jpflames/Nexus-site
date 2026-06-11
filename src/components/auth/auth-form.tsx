@@ -29,13 +29,15 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
+    const { auth } = client;
+
     async function checkSession() {
-      const { data } = await client.auth.getSession();
+      const { data } = await auth.getSession();
       setSession(data.session);
     }
     checkSession();
 
-    const { data } = client.auth.onAuthStateChange((_event, session) => {
+    const { data } = auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
