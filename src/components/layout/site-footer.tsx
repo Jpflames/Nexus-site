@@ -4,6 +4,8 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { FooterNewsletter } from "@/components/layout/footer-newsletter";
 import { company, footerServices, navLinks } from "@/lib/site";
 
+const footerEmail = "info@nexusmediaglobal.org";
+
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-white/10 bg-[#0a0a0a]">
@@ -27,8 +29,8 @@ export function SiteFooter() {
             </li>
             <li className="flex items-start gap-2">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
-              <a href={`mailto:${company.email}`} className="hover:text-white">
-                {company.email}
+              <a href={`mailto:${footerEmail}`} className="hover:text-white">
+                {footerEmail}
               </a>
             </li>
           </ul>
