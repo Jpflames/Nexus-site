@@ -72,14 +72,20 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (error) throw error;
         setMessage("Signed in successfully. Redirecting...");
       } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`,
+        const response = await fetch("/api/auth/sign-up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({ email, password }),
         });
-        if (error) throw error;
+
+        const result = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+
+        if (!response.ok) {
+          throw new Error(result?.error || "Unable to create account.");
+        }
+
         setMessage("Account created. Check your email for the confirmation link.");
       }
     } catch (error) {
