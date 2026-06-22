@@ -1,18 +1,8 @@
-import type { SVGProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { FacebookIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/social-icons";
 import { FooterNewsletter } from "@/components/layout/footer-newsletter";
-import { company, footerServices, navLinks, socialLinks } from "@/lib/site";
-
-function XIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
+import { company, footerServices, navLinks } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -71,26 +61,6 @@ export function SiteFooter() {
         </div>
 
         <div className="space-y-8">
-          <div>
-            <p className="font-display text-sm font-semibold text-white">Stay Connected</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.href}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-zinc-900 text-zinc-300 transition hover:border-emerald-400/40 hover:text-white"
-                  aria-label={s.label}
-                >
-                  {s.icon === "linkedin" && <LinkedInIcon className="h-4 w-4" />}
-                  {s.icon === "instagram" && <InstagramIcon className="h-4 w-4" />}
-                  {s.icon === "x" && <XIcon className="h-4 w-4" />}
-                  {s.icon === "facebook" && <FacebookIcon className="h-4 w-4" />}
-                </a>
-              ))}
-            </div>
-          </div>
           <FooterNewsletter />
         </div>
       </div>
