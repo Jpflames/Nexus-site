@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServiceSupabaseClient } from "@/lib/supabase-server";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
 import { verifyPaystackWebhookSignature } from "@/lib/paystack";
 import { markPaymentComplete, PaymentSchemaMissingError } from "@/lib/payments";
 
@@ -27,9 +27,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing payment reference." }, { status: 400 });
   }
 
-  const supabase = createServiceSupabaseClient();
+  const firestore = getFirebaseFirestore();
   try {
-    await markPaymentComplete(supabase, reference, payload.data.metadata || null);
+    await markPaymentComplete(firestore, reference, payload.data.metadata || null);
   } catch (error) {
     if (error instanceof PaymentSchemaMissingError) {
       return NextResponse.json({ error: error.message }, { status: 503 });

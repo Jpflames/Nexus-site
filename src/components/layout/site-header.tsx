@@ -6,8 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Menu, UserPlus, X } from "lucide-react";
-import type { Session } from "@supabase/supabase-js";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { getFirebaseAuth, syncFirebaseSession } from "@/lib/firebase-client";
 import { company, navLinks } from "@/lib/site";
 
 /** Sticky header — premium Nexus Media navigation with floating mobile menu and conversion CTA */
@@ -15,25 +15,28 @@ export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [supabase] = useState(() =>
-    createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""),
-  );
-  const [session, setSession] = useState<Session | null>(null);
+  const [auth] = useState(() => getFirebaseAuth());
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (!supabase) {
+    if (!auth) {
       return;
     }
 
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser: User | null) => {
+      setUser(currentUser);
+
+      try {
+        await syncFirebaseSession(currentUser);
+      } catch {
+        // Ignore sync failures here; the forms handle visible feedback.
+      }
     });
 
     return () => {
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
-  }, [supabase]);
+  }, [auth]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -43,11 +46,12 @@ export function SiteHeader() {
   }, [open]);
 
   const handleSignOut = async () => {
-    if (!supabase) {
+    if (!auth) {
       return;
     }
 
-    await supabase.auth.signOut();
+    await signOut(auth);
+    await syncFirebaseSession(null);
     router.push("/");
   };
 
@@ -89,7 +93,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="relative z-10 ml-auto flex items-center gap-3">
-          {session?.user ? (
+          {user?.email ? (
             <>
               <Link
                 href="/dashboard"
@@ -127,7 +131,7 @@ export function SiteHeader() {
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen((value) => !value)}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -145,12 +149,12 @@ export function SiteHeader() {
             className="border-t border-white/10 bg-black/95 md:hidden"
           >
             <nav className="flex flex-col gap-1 px-4 py-4" aria-label="Mobile primary">
-              {navLinks.map((link, i) => (
+              {navLinks.map((link, index) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.04 * i }}
+                  transition={{ delay: 0.04 * index }}
                 >
                   <Link
                     href={link.href}
@@ -163,7 +167,7 @@ export function SiteHeader() {
                   </Link>
                 </motion.div>
               ))}
-              {session?.user ? (
+              {user?.email ? (
                 <div className="mt-3 space-y-2">
                   <Link
                     href="/dashboard"

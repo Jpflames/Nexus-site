@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient, createServiceSupabaseClient } from "@/lib/supabase-server";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
 import { initializePaystackTransaction } from "@/lib/paystack";
 import { assertPaymentsTableReady, createPendingPayment, PaymentSchemaMissingError } from "@/lib/payments";
 import { getPaymentPlan } from "@/lib/payment-plans";
 
 export async function POST(request: Request) {
-  const authSupabase = await createServerSupabaseClient();
-  const serviceSupabase = createServiceSupabaseClient();
-  const {
-    data: { session },
-  } = await authSupabase.auth.getSession();
+  const session = await getAuthenticatedUser();
+  const firestore = getFirebaseFirestore();
 
-  if (!session || !session.user.email || !session.user.id) {
+  if (!session || !session.email || !session.uid) {
     return NextResponse.json({ error: "Authentication required." }, { status: 401 });
   }
 
@@ -29,11 +27,11 @@ export async function POST(request: Request) {
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const reference = `nexus_${session.user.id}_${Date.now()}`;
+  const reference = `nexus_${session.uid}_${Date.now()}`;
   const callbackUrl = `${appUrl}/success?provider=paystack&plan=${encodeURIComponent(selectedPlan.title)}&reference=${encodeURIComponent(reference)}`;
 
   try {
-    await assertPaymentsTableReady(serviceSupabase);
+    await assertPaymentsTableReady(firestore);
   } catch (error) {
     if (error instanceof PaymentSchemaMissingError) {
       return NextResponse.json({ error: error.message }, { status: 503 });
@@ -42,7 +40,7 @@ export async function POST(request: Request) {
   }
 
   const transaction = await initializePaystackTransaction({
-    email: session.user.email,
+    email: session.email,
     amount: selectedPlan.price,
     reference,
     plan: selectedPlan.title,
@@ -53,8 +51,8 @@ export async function POST(request: Request) {
 
   try {
     await createPendingPayment(
-      serviceSupabase,
-      session.user.id,
+      firestore,
+      session.uid,
       selectedPlan.title,
       selectedPlan.price,
       provider,

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Sparkles } from "lucide-react";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
 
 export const metadata: Metadata = {
   title: "Checkout | Nexus Media Enrollment",
@@ -15,10 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutPage() {
-  const supabase = await createServerSupabaseClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const session = await getAuthenticatedUser();
 
   if (!session) {
     redirect("/signup");

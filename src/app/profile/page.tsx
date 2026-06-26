@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Mail, User2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { FadeIn } from "@/components/motion/fade-in";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
 import { getActivePurchase } from "@/lib/payments";
 
 export const metadata = {
@@ -15,16 +16,14 @@ export const metadata = {
 };
 
 export default async function ProfilePage() {
-  const supabase = await createServerSupabaseClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const session = await getAuthenticatedUser();
+  const firestore = getFirebaseFirestore();
 
   if (!session) {
     redirect("/login");
   }
 
-  const purchase = await getActivePurchase(supabase, session.user.id);
+  const purchase = await getActivePurchase(firestore, session.uid);
 
   return (
     <main className="nexus-page-glow pb-24 pt-20">
@@ -57,13 +56,13 @@ export default async function ProfilePage() {
                 </div>
                 <div>
                   <p className="text-sm uppercase tracking-[0.28em] text-cyan-300/80">Account info</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">{session.user.email}</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{session.email}</p>
                 </div>
               </div>
               <div className="mt-8 space-y-4 text-sm text-slate-300">
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
                   <p className="font-semibold text-white">Email</p>
-                  <p className="mt-2">{session.user.email}</p>
+                  <p className="mt-2">{session.email}</p>
                 </div>
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
                   <p className="font-semibold text-white">Membership status</p>

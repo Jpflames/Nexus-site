@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, Lock } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { getPublishedCoursesForPhase } from "@/lib/courses";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
+import { getPublishedCoursesForPhase, type CourseContent, type CourseLesson } from "@/lib/courses";
 import { coursePaths, faqItems, getPhaseBySlug, mentorProfiles, testimonials } from "@/lib/nea";
 import { hasPhaseAccess } from "@/lib/payments";
 
@@ -38,12 +39,10 @@ export default async function CoursePhasePage({ params }: { params: { slug: stri
     notFound();
   }
 
-  const supabase = await createServerSupabaseClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const hasAccess = session ? await hasPhaseAccess(supabase, session.user.id, phase.slug) : false;
-  const courses = hasAccess ? await getPublishedCoursesForPhase(supabase, phase.slug) : [];
+  const session = await getAuthenticatedUser();
+  const firestore = getFirebaseFirestore();
+  const hasAccess = session ? await hasPhaseAccess(firestore, session.uid, phase.slug) : false;
+  const courses = hasAccess ? await getPublishedCoursesForPhase(firestore, phase.slug) : [];
 
   const projectShowcase = [
     "Portfolio case study with real hiring context.",
@@ -96,13 +95,13 @@ export default async function CoursePhasePage({ params }: { params: { slug: stri
                 {hasAccess ? (
                   <div className="mt-8 space-y-4">
                     {courses.length ? (
-                      courses.map((course) => (
+                      courses.map((course: CourseContent) => (
                         <div key={course.id} className="rounded-3xl border border-white/10 bg-black/40 p-5">
                           <p className="font-semibold text-white">{course.title}</p>
                           {course.description && <p className="mt-3 text-sm leading-7 text-slate-300">{course.description}</p>}
                           {course.course_lessons?.length ? (
                             <div className="mt-4 space-y-3">
-                              {course.course_lessons.map((lesson) => (
+                              {course.course_lessons.map((lesson: CourseLesson) => (
                                 <div key={lesson.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                                   <p className="text-sm font-semibold text-white">{lesson.title}</p>
                                   {lesson.content && <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.content}</p>}

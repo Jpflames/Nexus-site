@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { Session } from "@supabase/supabase-js";
-import { createBrowserClient } from "@/lib/supabase-client";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, type User } from "firebase/auth";
+import { getFirebaseAuth, hasFirebaseClientConfig, syncFirebaseSession } from "@/lib/firebase-client";
 
 interface AuthFormProps {
   mode: "sign-in" | "sign-up";
@@ -12,81 +12,72 @@ interface AuthFormProps {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
-  const [supabase] = useState(() =>
-    createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""),
-  );
-  const [session, setSession] = useState<Session | null>(null);
+  const [auth] = useState(() => getFirebaseAuth());
+  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const client = supabase;
-
-    if (!client) {
-      setMessage("Authentication is unavailable because Supabase credentials are not configured.");
+    if (!auth) {
+      setMessage("Authentication is unavailable because Firebase credentials are not configured.");
       return;
     }
 
-    const { auth } = client;
-
-    async function checkSession() {
-      const { data } = await auth.getSession();
-      setSession(data.session);
-    }
-    checkSession();
-
-    const { data } = auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser: User | null) => {
+      if (currentUser) {
+        setLoading(true);
+        setMessage("Syncing session...");
+        const result = await syncFirebaseSession(currentUser);
+        if (result.success) {
+          setUser(currentUser);
+          setMessage("Signed in successfully. Redirecting...");
+        } else {
+          try {
+            await auth.signOut();
+          } catch (signOutErr) {
+            console.error("Sign out error:", signOutErr);
+          }
+          setUser(null);
+          setMessage(`Session sync failed: ${result.error}`);
+        }
+        setLoading(false);
+      } else {
+        setUser(null);
+        await syncFirebaseSession(null);
+      }
     });
 
     return () => {
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
-  }, [supabase]);
+  }, [auth]);
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       router.replace("/dashboard");
     }
-  }, [session, router]);
+  }, [router, user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     setMessage(null);
 
-    if (!supabase) {
-      setMessage("Authentication is unavailable because Supabase credentials are not configured.");
+    if (!auth) {
+      setMessage("Authentication is unavailable because Firebase credentials are not configured.");
       setLoading(false);
       return;
     }
 
     try {
       if (mode === "sign-in") {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
+        await signInWithEmailAndPassword(auth, email, password);
         setMessage("Signed in successfully. Redirecting...");
       } else {
-        const response = await fetch("/api/auth/sign-up", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const result = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
-
-        if (!response.ok) {
-          throw new Error(result?.error || "Unable to create account.");
-        }
-
-        setMessage("Account created. Check your email for the confirmation link.");
+        await createUserWithEmailAndPassword(auth, email, password);
+        setMessage("Account created. Redirecting...");
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unable to authenticate.";
@@ -95,6 +86,15 @@ export function AuthForm({ mode }: AuthFormProps) {
       setLoading(false);
     }
   };
+
+  if (!hasFirebaseClientConfig()) {
+    return (
+      <div className="space-y-6 rounded-[2rem] border border-white/10 bg-black/70 p-10">
+        <h1 className="text-3xl font-semibold text-white">{mode === "sign-in" ? "Sign in" : "Create account"}</h1>
+        <p className="text-sm text-slate-300">Firebase credentials are not configured yet.</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 rounded-[2rem] border border-white/10 bg-black/70 p-10">

@@ -15,8 +15,8 @@ export default function CoursesPage() {
   return (
     <main className="nexus-page-glow">
       <CourseCatalogHero />
-      <PhaseRoadmap />
       <PricingSection />
+      <PhaseRoadmap />
     </main>
   );
 }

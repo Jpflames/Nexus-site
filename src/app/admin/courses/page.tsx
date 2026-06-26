@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { CourseAdminForm } from "@/components/admin/course-admin-form";
 import { FadeIn } from "@/components/motion/fade-in";
 import { isAdminEmail } from "@/lib/admin";
-import { createServerSupabaseClient, createServiceSupabaseClient } from "@/lib/supabase-server";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
+import { getAdminCourses } from "@/lib/courses";
 
 export const metadata: Metadata = {
   title: "Admin Courses | Nexus Media",
@@ -11,16 +13,14 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminCoursesPage() {
-  const authSupabase = await createServerSupabaseClient();
-  const {
-    data: { session },
-  } = await authSupabase.auth.getSession();
+  const session = await getAuthenticatedUser();
+  const firestore = getFirebaseFirestore();
 
   if (!session) {
     redirect("/login");
   }
 
-  if (!isAdminEmail(session.user.email)) {
+  if (!isAdminEmail(session.email)) {
     return (
       <main className="nexus-page-glow pb-24 pt-20">
         <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -38,12 +38,7 @@ export default async function AdminCoursesPage() {
     );
   }
 
-  const serviceSupabase = createServiceSupabaseClient();
-  const { data } = await serviceSupabase
-    .from("courses")
-    .select("id,title,phase_slug,is_published,sort_order,course_lessons(id,title,is_published)")
-    .order("created_at", { ascending: false })
-    .limit(50);
+  const data = await getAdminCourses(firestore);
 
   return (
     <main className="nexus-page-glow pb-24 pt-20">

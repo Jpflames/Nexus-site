@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createServiceSupabaseClient } from "@/lib/supabase-server";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
 import { verifyPaystackTransaction } from "@/lib/paystack";
 import { markPaymentComplete } from "@/lib/payments";
 import { getPaymentPlan } from "@/lib/payment-plans";
@@ -30,8 +30,8 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     try {
       const transaction = await verifyPaystackTransaction(reference);
       if (transaction.status === "success" && transaction.reference) {
-        const supabase = createServiceSupabaseClient();
-        await markPaymentComplete(supabase, transaction.reference, transaction.metadata || null);
+        const firestore = getFirebaseFirestore();
+        await markPaymentComplete(firestore, transaction.reference, transaction.metadata || null);
         confirmationMessage = selectedPlan
           ? `Your payment for ${selectedPlan.title} is confirmed. Published admin-uploaded courses for that phase are now unlocked.`
           : "Your payment is confirmed. Published admin-uploaded courses for your paid phase are now unlocked.";
