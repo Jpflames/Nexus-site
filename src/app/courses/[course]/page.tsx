@@ -8,27 +8,32 @@ import { getFirebaseFirestore } from "@/lib/firebase-admin";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ courseId: string }> }): Promise<Metadata> {
-  const { courseId } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ course: string }> }): Promise<Metadata> {
+  const { course } = await params;
   const firestore = getFirebaseFirestore();
   if (!firestore) {
     return { title: "Course Details | Nexus Media" };
   }
 
-  const courseSnap = await firestore.collection("courses").doc(courseId).get();
+  // Try fetching by document id first, then fall back to slug lookup
+  let courseSnap = await firestore.collection("courses").doc(course).get();
   if (!courseSnap.exists) {
-    return { title: "Course Not Found" };
+    const q = await firestore.collection("courses").where("slug", "==", course).limit(1).get();
+    if (q.empty) {
+      return { title: "Course Not Found" };
+    }
+    courseSnap = q.docs[0];
   }
 
-  const course = courseSnap.data();
+  const courseData = courseSnap.data();
   return {
-    title: `${course?.title || "Course"} | Nexus Media`,
-    description: course?.description || "Course details and learning phases.",
+    title: `${courseData?.title || "Course"} | Nexus Media`,
+    description: courseData?.description || "Course details and learning phases.",
   };
 }
 
-export default async function CourseDetailPage({ params }: { params: Promise<{ courseId: string }> }) {
-  const { courseId } = await params;
+export default async function CourseDetailPage({ params }: { params: Promise<{ course: string }> }) {
+  const { course } = await params;
   const session = await getAuthenticatedUser();
   if (!session) {
     redirect("/login");
@@ -43,17 +48,19 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
     );
   }
 
-  // Fetch course
-  const courseSnap = await firestore.collection("courses").doc(courseId).get();
+  // Fetch course by id or slug
+  let courseSnap = await firestore.collection("courses").doc(course).get();
   if (!courseSnap.exists) {
-    notFound();
+    const q = await firestore.collection("courses").where("slug", "==", course).limit(1).get();
+    if (q.empty) notFound();
+    courseSnap = q.docs[0];
   }
-  const course = { id: courseSnap.id, ...courseSnap.data() } as any;
+  const courseData = { id: courseSnap.id, ...courseSnap.data() } as any;
 
   // Fetch phases
   const phasesSnapshot = await firestore
     .collection("courses")
-    .doc(courseId)
+    .doc(courseData.id)
     .collection("phases")
     .orderBy("sortOrder", "asc")
     .get();
@@ -67,13 +74,11 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
   const enrollmentsSnapshot = await firestore
     .collection("enrollments")
     .where("uid", "==", session.uid)
-    .where("courseId", "==", courseId)
+    .where("courseId", "==", courseData.id)
     .where("active", "==", true)
     .get();
 
-  const enrolledPhaseIds = new Set(
-    enrollmentsSnapshot.docs.map((doc) => doc.data().phaseId)
-  );
+  const enrolledPhaseIds = new Set(enrollmentsSnapshot.docs.map((doc) => doc.data().phaseId));
 
   return (
     <main className="nexus-page-glow min-h-[calc(100vh-6rem)] py-12">
@@ -99,15 +104,15 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
                   Premium Cohort Course
                 </span>
                 <h1 className="mt-5 font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl leading-tight">
-                  {course.title}
+                  {courseData.title}
                 </h1>
                 <p className="mt-4 text-base leading-relaxed text-slate-300">
-                  {course.description}
+                  {courseData.description}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4 text-sm text-slate-300">
                   <div className="rounded-full bg-white/5 border border-white/5 px-4 py-2 flex items-center gap-2">
                     <Clock className="h-4 w-4 text-cyan-300" />
-                    <span>{course.duration || "Self-paced"}</span>
+                    <span>{courseData.duration || "Self-paced"}</span>
                   </div>
                   <div className="rounded-full bg-white/5 border border-white/5 px-4 py-2 flex items-center gap-2">
                     <Layers className="h-4 w-4 text-cyan-300" />
@@ -115,17 +120,17 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
                   </div>
                   <div className="rounded-full bg-white/5 border border-white/5 px-4 py-2 flex items-center gap-2">
                     <span className="text-cyan-300 font-semibold">Instructor:</span>
-                    <span>{course.instructor || "Nexus Media"}</span>
+                    <span>{courseData.instructor || "Nexus Media"}</span>
                   </div>
                 </div>
               </div>
 
               <div className="relative h-64 lg:h-auto w-full bg-slate-950">
-                {course.thumbnail ? (
+                {courseData.thumbnail ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={course.thumbnail}
-                    alt={course.title}
+                    src={courseData.thumbnail}
+                    alt={courseData.title}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -209,7 +214,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ c
                           </Link>
                         ) : (
                           <Link
-                            href={`/checkout?courseId=${courseId}&phaseId=${phase.id}`}
+                            href={`/checkout?courseId=${courseData.id}&phaseId=${phase.id}`}
                             className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-400 hover:bg-cyan-300 px-6 py-3 text-sm font-semibold text-black transition duration-200"
                           >
                             Buy Phase Now
