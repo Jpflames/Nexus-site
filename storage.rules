@@ -1,0 +1,30 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper function to check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper to check if the user is accessing their own storage folder
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Assignments submissions folder: user can read/write their own files
+    match /assignments/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Portfolios folder: user can read/write their own files (resume, projects)
+    match /portfolios/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Course assets (thumbnails, lessons videos, etc.)
+    match /courses/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}

@@ -23,7 +23,7 @@ export function SiteHeader() {
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser: User | null) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       try {

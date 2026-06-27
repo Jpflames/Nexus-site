@@ -1,12 +1,39 @@
+import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth/auth-form";
 import { FadeIn } from "@/components/motion/fade-in";
+import { getAuthenticatedUser } from "@/lib/firebase-session";
+import { getFirebaseFirestore } from "@/lib/firebase-admin";
 
 export const metadata = {
   title: "Login | Nexus Media Member Access",
   description: "Sign in to your Nexus Media account to access checkout, profile, and the student dashboard.",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getAuthenticatedUser();
+  if (session) {
+    const firestore = getFirebaseFirestore();
+    let role = "student";
+    let hasEnrollment = false;
+
+    if (firestore) {
+      const docSnap = await firestore.collection("users").doc(session.uid).get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        role = data?.role || "student";
+        hasEnrollment = Boolean(data?.hasEnrollment);
+      }
+    }
+
+    if (role === "admin") {
+      redirect("/admin");
+    } else if (hasEnrollment) {
+      redirect("/dashboard");
+    } else {
+      redirect("/courses");
+    }
+  }
+
   return (
     <main className="nexus-page-glow pb-24 pt-20">
       <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">

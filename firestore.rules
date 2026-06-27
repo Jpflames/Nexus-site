@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if the user is an Admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        (
+          (request.auth.token.email != null && request.auth.token.email.matches('.*admin.*')) ||
+          (
+            exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+          )
+        );
+    }
+
+    // User Profile Rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if (isAuthenticated() && request.auth.uid == userId) || isAdmin();
+    }
+
+    // Courses Rules
+    match /courses/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Student Courses Rules
+    match /studentCourses/{docId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.studentId == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.studentId == request.auth.uid || isAdmin());
+    }
+
+    // Assignments Rules
+    match /assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Student Assignments Rules
+    match /studentAssignments/{docId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.studentId == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.studentId == request.auth.uid || isAdmin());
+    }
+
+    // Results Rules
+    match /results/{docId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.studentId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Certificates Rules
+    match /certificates/{docId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.studentId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Live Classes Rules
+    match /live_classes/{classId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Announcements Rules
+    match /announcements/{announcementId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Community Messages Rules
+    match /messages/{messageId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

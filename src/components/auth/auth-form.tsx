@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, type User } from "firebase/auth";
-import { getFirebaseAuth, hasFirebaseClientConfig, syncFirebaseSession } from "@/lib/firebase-client";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirebaseAuth, getFirebaseFirestoreClient, hasFirebaseClientConfig, syncFirebaseSession } from "@/lib/firebase-client";
 
 interface AuthFormProps {
   mode: "sign-in" | "sign-up";
@@ -16,6 +17,8 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -33,6 +36,14 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (result.success) {
           setUser(currentUser);
           setMessage("Signed in successfully. Redirecting...");
+          if (result.role === "admin") {
+            router.replace("/admin");
+          } else if (result.hasEnrollment) {
+            router.replace("/dashboard");
+          } else {
+            router.replace("/courses");
+          }
+          router.refresh();
         } else {
           try {
             await auth.signOut();
@@ -52,13 +63,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     return () => {
       unsubscribe();
     };
-  }, [auth]);
-
-  useEffect(() => {
-    if (user) {
-      router.replace("/dashboard");
-    }
-  }, [router, user]);
+  }, [auth, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -76,8 +81,21 @@ export function AuthForm({ mode }: AuthFormProps) {
         await signInWithEmailAndPassword(auth, email, password);
         setMessage("Signed in successfully. Redirecting...");
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-        setMessage("Account created. Redirecting...");
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        const newUser = credential.user;
+        const firestore = getFirebaseFirestoreClient();
+        if (firestore) {
+          await setDoc(doc(firestore, "users", newUser.uid), {
+            name: fullName,
+            email: email,
+            phone: phone,
+            role: "student",
+            hasEnrollment: false,
+            profileImage: `https://i.pravatar.cc/150?u=${newUser.uid}`,
+            createdAt: new Date().toISOString(),
+          });
+        }
+        setMessage("Account created successfully. Redirecting...");
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unable to authenticate.";
@@ -108,6 +126,32 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       <div className="grid gap-4">
+        {mode === "sign-up" && (
+          <>
+            <label className="block text-sm font-medium text-slate-200">
+              Full Name
+              <input
+                type="text"
+                value={fullName}
+                onChange={(event) => setFullName(event.target.value)}
+                required
+                placeholder="John Doe"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-slate-200 outline-none transition focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/40"
+              />
+            </label>
+            <label className="block text-sm font-medium text-slate-200">
+              Phone Number
+              <input
+                type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                required
+                placeholder="+234 80 1234 5678"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-slate-200 outline-none transition focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/40"
+              />
+            </label>
+          </>
+        )}
         <label className="block text-sm font-medium text-slate-200">
           Email address
           <input

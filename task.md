@@ -1,0 +1,38 @@
+# Task List - Nexus Media Global Student Portal MVP
+
+- [x] Task 1: Auth Flow & Role Redirection
+  - [x] Update Sign Up form to include Full Name and Phone Number.
+  - [x] Write user data to Firestore `users/{uid}` with fields: `name`, `email`, `phone`, `role` ("admin" or "student"), `hasEnrollment` (false), `createdAt`.
+  - [x] Update `/api/auth/session` to check role/enrollment status in Firestore and return it.
+  - [x] Adjust `AuthForm` client-side redirect logic to land users on `/admin`, `/dashboard`, or `/courses`.
+- [x] Task 2: Courses & Phase Details Pages
+  - [x] Rebuild `/courses` page to fetch enabled courses dynamically.
+  - [x] Create `/courses/[courseId]` page to display course overview, phases, and lock/unlock actions.
+- [x] Task 3: Paystack Checkout & Webhook Integration
+  - [x] Update `/checkout` page and `CheckoutForm` to process dynamic `courseId` and `phaseId`.
+  - [x] Update `/api/checkout` API to calculate price from Firestore and initialize Paystack.
+  - [x] Create shared payment completion helper.
+  - [x] Update `/success` callback and `/api/webhook` to verify Paystack transactions, set `payments` status, create `enrollments`, and set `hasEnrollment = true`.
+- [x] Task 4: Student Learning Dashboard
+  - [x] Refactor `/dashboard` and `dashboard-shell.tsx` sidebar tabs.
+  - [x] Fetch current course, phases, lessons, and calculate completion rates.
+  - [x] Create interactive video player, notes, and resource download area.
+  - [x] Add "Mark as Completed" lesson tracking and progress bar recalculation.
+  - [x] Integrate assignments panel to upload submissions (Firebase Storage) and view review status.
+  - [x] Implement announcements view.
+  - [x] Update profile panel to edit name, phone, password, and profile image upload.
+- [x] Task 5: Admin Portal Shell & Metrics
+  - [x] Create `/admin/layout.tsx` to restrict access to authenticated admins.
+  - [x] Create `/admin/page.tsx` displaying statistics (Total Students, Courses, Enrollments, Revenue, Pending Payments).
+- [x] Task 6: Admin Content Management CRUD
+  - [x] Create Admin Course manager.
+  - [x] Create Admin Phase manager.
+  - [x] Create Admin Lesson manager.
+  - [x] Create Student & Enrollment activation manager.
+  - [x] Create Announcement publisher.
+  - [x] Create Transaction audit log viewer.
+- [x] Task 7: Route Protection Middleware
+  - [x] Write `src/middleware.ts` to block unauthorized requests on dashboard, admin, and checkouts.
+- [x] Task 8: Compilation, Verification & Final Polish
+  - [x] Run build and lint checks.
+  - [x] Confirm end-to-end user and admin workflows.

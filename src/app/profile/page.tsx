@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getFirebaseFirestore } from "@/lib/firebase-admin";
 import { getAuthenticatedUser } from "@/lib/firebase-session";
-import { getActivePurchase } from "@/lib/payments";
 
 export const metadata = {
   title: "Profile | Nexus Media Member",
@@ -23,7 +22,21 @@ export default async function ProfilePage() {
     redirect("/login");
   }
 
-  const purchase = await getActivePurchase(firestore, session.uid);
+  let hasEnrollment = false;
+  let enrolledPhasesCount = 0;
+
+  if (firestore) {
+    const userSnap = await firestore.collection("users").doc(session.uid).get();
+    if (userSnap.exists) {
+      hasEnrollment = Boolean(userSnap.data()?.hasEnrollment);
+    }
+    const enrollSnap = await firestore
+      .collection("enrollments")
+      .where("uid", "==", session.uid)
+      .where("active", "==", true)
+      .get();
+    enrolledPhasesCount = enrollSnap.size;
+  }
 
   return (
     <main className="nexus-page-glow pb-24 pt-20">
@@ -66,11 +79,15 @@ export default async function ProfilePage() {
                 </div>
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
                   <p className="font-semibold text-white">Membership status</p>
-                  <p className="mt-2 text-cyan-300">{purchase ? "Active learner" : "Pending enrollment"}</p>
+                  <p className="mt-2 text-cyan-300">{hasEnrollment ? "Active learner" : "Pending enrollment"}</p>
                 </div>
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
                   <p className="font-semibold text-white">Current enrollment</p>
-                  <p className="mt-2">{purchase ? purchase.plan : "No paid access yet"}</p>
+                  <p className="mt-2">
+                    {hasEnrollment 
+                      ? `${enrolledPhasesCount} Enrolled Phase${enrolledPhasesCount === 1 ? "" : "s"}` 
+                      : "No paid access yet"}
+                  </p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,7 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth, type User } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 type ClientFirebaseConfig = {
   apiKey?: string;
@@ -42,7 +44,17 @@ export function getFirebaseAuth(): Auth | null {
   return app ? getAuth(app) : null;
 }
 
-export async function syncFirebaseSession(user: User | null): Promise<{ success: boolean; error?: string }> {
+export function getFirebaseFirestoreClient(): Firestore | null {
+  const app = getFirebaseClientApp();
+  return app ? getFirestore(app) : null;
+}
+
+export function getFirebaseStorageClient(): FirebaseStorage | null {
+  const app = getFirebaseClientApp();
+  return app ? getStorage(app) : null;
+}
+
+export async function syncFirebaseSession(user: User | null): Promise<{ success: boolean; role?: string; hasEnrollment?: boolean; error?: string }> {
   if (!user) {
     const res = await fetch("/api/auth/session", {
       method: "DELETE",
@@ -65,7 +77,12 @@ export async function syncFirebaseSession(user: User | null): Promise<{ success:
       return { success: false, error: data.error || `Server responded with status ${res.status}` };
     }
     
-    return { success: true };
+    const data = await res.json().catch(() => ({}));
+    return { 
+      success: true, 
+      role: data.role || "student", 
+      hasEnrollment: Boolean(data.hasEnrollment) 
+    };
   } catch (err) {
     console.error("Error syncing Firebase session:", err);
     return { success: false, error: err instanceof Error ? err.message : "Network error during session sync" };
