@@ -6,6 +6,8 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { getAuthenticatedUser } from "@/lib/firebase-session";
 import { getFirebaseFirestore } from "@/lib/firebase-admin";
 
+import { CourseCatalogHero, PhaseRoadmap, PricingSection } from "@/components/course/course-catalog";
+
 export const metadata: Metadata = {
   title: "Courses | Nexus Media Student Portal",
   description: "Explore the Nexus Media premium course catalog and accelerate your career with structured phases, mentorship, and placement support.",
@@ -14,7 +16,13 @@ export const metadata: Metadata = {
 export default async function CoursesPage() {
   const session = await getAuthenticatedUser();
   if (!session) {
-    redirect("/login");
+    return (
+      <main className="nexus-page-glow min-h-[calc(100vh-6rem)]">
+        <CourseCatalogHero />
+        <PhaseRoadmap />
+        <PricingSection />
+      </main>
+    );
   }
 
   const firestore = getFirebaseFirestore();

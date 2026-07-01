@@ -2,15 +2,43 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { serviceInterestOptions } from "@/lib/site";
+import { getFirebaseFirestoreClient } from "@/lib/firebase-client";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("sent");
+    setStatus("submitting");
+    setErrorMsg("");
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        phone: (formData.get("phone") as string) || "",
+        service: (formData.get("service") as string) || "",
+        message: formData.get("message") as string,
+        createdAt: serverTimestamp(),
+      };
+
+      const firestore = getFirebaseFirestoreClient();
+      if (!firestore) {
+        throw new Error("Firebase is not initialized");
+      }
+
+      await addDoc(collection(firestore, "contacts"), data);
+      setStatus("sent");
+    } catch (err) {
+      console.error("Error saving contact message:", err);
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
+    }
   }
 
   const inputClass =
@@ -78,14 +106,26 @@ export function ContactForm() {
         </div>
         <button
           type="submit"
-          className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold text-white btn-gradient"
+          disabled={status === "submitting" || status === "sent"}
+          className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold text-white btn-gradient disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <Send className="h-4 w-4" />
-          Send Message
+          {status === "submitting" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : status === "sent" ? (
+            <Send className="h-4 w-4" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
+          {status === "submitting" ? "Sending..." : status === "sent" ? "Message Sent" : "Send Message"}
         </button>
         {status === "sent" && (
-          <p className="text-center text-sm text-zinc-500" role="status">
-            Thanks — connect this form to your backend or form service when you go live.
+          <p className="text-center text-sm text-emerald-400" role="status">
+            Thanks! Your message has been sent successfully. We will get back to you shortly.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-center text-sm text-red-400" role="alert">
+            {errorMsg || "Failed to send message. Please try again later."}
           </p>
         )}
       </form>

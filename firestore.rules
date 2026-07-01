@@ -76,5 +76,11 @@ service cloud.firestore {
     match /messages/{messageId} {
       allow read, write: if isAuthenticated();
     }
+
+    // Contact Form Messages Rules
+    match /contacts/{contactId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
   }
 }

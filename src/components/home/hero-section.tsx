@@ -75,7 +75,7 @@ export function HeroSection() {
             className="mt-10 flex w-full max-w-md flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:justify-center"
           >
             <Link
-              href="/contact"
+              href="/signup"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-lime-400 px-8 py-3.5 text-sm font-semibold text-black shadow-[0_18px_45px_rgba(16,185,129,0.22)] transition hover:brightness-110"
             >
               Get Started

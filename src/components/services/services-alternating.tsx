@@ -98,7 +98,7 @@ export function ServicesAlternating() {
                   ))}
                 </ul>
                 <Link
-                  href="/contact"
+                  href="/signup"
                   className="mt-10 inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold text-white btn-gradient"
                 >
                   Get Started
