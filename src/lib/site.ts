@@ -9,7 +9,7 @@ export const company = {
   description:
     "Nexus Media is a creative and professional services company delivering branding, marketing, media support, HR services, and career acceleration programs.",
   phone: "+2349013940923",
-  email: "thenexusmedia.global@gmail.com",
+  email: "info@nexusmediaglobal.org",
   address: "AMAC, Abuja, Nigeria",
   founder: {
     name: "Nathaniel Ishaya",
