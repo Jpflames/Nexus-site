@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { company } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/react";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -57,6 +58,7 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   );
